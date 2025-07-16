@@ -20,5 +20,7 @@ substitutions:
   _IMAGE: us-central1-docker.pkg.dev/$PROJECT_ID/cricket-repo/app:$SHORT_SHA
 images:
   - ${_IMAGE}
+options:
+  logging: CLOUD_LOGGING_ONLY
 
 
