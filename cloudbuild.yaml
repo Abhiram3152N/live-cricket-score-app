@@ -13,5 +13,6 @@ steps:
       - run=filename=app.yaml
       - --location=us-central1
       - --cluster=cricket-cluster
-
+options:
+  logging: CLOUD_LOGGING_ONLY
 
