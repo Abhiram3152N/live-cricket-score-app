@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: us-central1-docker.pkg.dev/x-landing-466108-p9/cricket-repo/app:v1
+        image: us-central1-docker.pkg.dev/x-landing-466108-p9/cricket-repo/app
 
 ---
 

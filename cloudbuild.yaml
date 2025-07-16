@@ -1,18 +1,24 @@
-steps:
-  # build the container image
-  - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "us-central1-docker.pkg.dev/$PROJECT_ID/app:v1", "."]
-  
-  # push container image
-  - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "us-central1-docker.pkg.dev/$PROJECT_ID/app:v1"]
+substitutions:
+  _REGION: us-central1
+  _REPO: cricket-repo
+  _IMAGE: '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/app:${SHORT_SHA}'
 
-  # deploy container image to GKE
-  - name: "gcr.io/cloud-builders/gke-deploy"
-    args:
-      - run=filename=app.yaml
-      - --location=us-central1
-      - --cluster=cricket-cluster
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${_IMAGE}', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '${_IMAGE}']
+
+  -  name: "gcr.io/cloud-builders/gke-deploy"
+     args:
+     - run
+     - --filename=app.yaml
+     - --location=us-centrall
+     - --cluster=gkecluster
+images:
+  - '${_IMAGE}'
+
 options:
   logging: CLOUD_LOGGING_ONLY
 
