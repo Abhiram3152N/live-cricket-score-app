@@ -15,7 +15,7 @@ steps:
      - run
      - --filename=app.yaml
      - --location=us-central1
-     - --cluster=gkecluster
+     - --cluster=cricket-cluster
 images:
   - '${_IMAGE}'
 
