@@ -1,29 +1,28 @@
 substitutions:
   _REGION: us-central1
   _REPO: cricket-repo
-  _IMAGE: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/app:${SHORT_SHA}
+  _IMAGE: '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/app:${SHORT_SHA}'
+
 steps:
-# Build Docker image
+# 1. Build Docker image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', '${_IMAGE}', '.']
 
-# Push image to Artifact Registry
+# 2. Push to Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', '${_IMAGE}']
 
-# Deploy to GKE
+# 3. Deploy to GKE
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: bash
   args:
     - -c
     - |
-      gcloud container clusters get-credentials cricket-cluster --zone us-central1-a --project $PROJECT_ID
+      gcloud container clusters get-credentials cricket-cluster --zone=us-central1-a --project=${PROJECT_ID}
       sed -i "s|IMAGE_PLACEHOLDER|${_IMAGE}|" k8s/deployment.yaml
       kubectl apply -f k8s/
-substitutions:
-  _IMAGE: us-central1-docker.pkg.dev/$PROJECT_ID/cricket-repo/app:$SHORT_SHA
 images:
-  - ${_IMAGE}
+  - '${_IMAGE}'
 options:
   logging: CLOUD_LOGGING_ONLY
 
