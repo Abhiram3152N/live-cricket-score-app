@@ -1,3 +1,7 @@
+substitutions:
+  _REGION: us-central1
+  _REPO: cricket-repo
+  _IMAGE: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/app:${SHORT_SHA}
 steps:
 # Build Docker image
 - name: 'gcr.io/cloud-builders/docker'
