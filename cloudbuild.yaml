@@ -1,31 +1,17 @@
-substitutions:
-  _REGION: us-central1
-  _REPO: cricket-repo
-  _IMAGE: '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/app:${SHORT_SHA}'
-
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '${_IMAGE}', '.']
+  # build the container image
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "us-central1-docker.pkg.dev/$PROJECT_ID/app:v1", "."]
 
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', '${_IMAGE}']
+  # push container image
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "us-central1-docker.pkg.dev/$PROJECT_ID/app:v1"]
 
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: bash
+  # deploy container image to GKE
+  - name: "gcr.io/cloud-builders/gke-deploy"
     args:
-      - -c
-      - >
-        gcloud container clusters get-credentials cricket-cluster --zone=us-central1-a --project=x-landing-466108-p9 &&
-        sed "s|IMAGE_PLACEHOLDER|us-central1-docker.pkg.dev/x-landing-466108-p9/cricket-repo/app:b16e9c6|" k8s/deployment.yaml > k8s/deployment-patched.yaml &&
-        kubectl apply -f k8s/deployment-patched.yaml &&
-        kubectl apply -f k8s/service.yaml
-
-
-images:
-  - '${_IMAGE}'
-
-
-options:
-  logging: CLOUD_LOGGING_ONLY
+      - run=filename=app.yaml
+      - --location=us-central1
+      - --cluster=cricket-cluster
 
 
