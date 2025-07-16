@@ -14,11 +14,12 @@ steps:
     entrypoint: bash
     args:
       - -c
-      - |
-        gcloud container clusters get-credentials cricket-cluster --zone=us-central1-a --project=${PROJECT_ID}
-        sed "s|IMAGE_PLACEHOLDER|${_IMAGE}|" k8s/deployment.yaml > k8s/deployment-patched.yaml
-        kubectl apply -f k8s/deployment-patched.yaml
+      - >
+        gcloud container clusters get-credentials cricket-cluster --zone=us-central1-a --project=x-landing-466108-p9 &&
+        sed "s|IMAGE_PLACEHOLDER|us-central1-docker.pkg.dev/x-landing-466108-p9/cricket-repo/app:b16e9c6|" k8s/deployment.yaml > k8s/deployment-patched.yaml &&
+        kubectl apply -f k8s/deployment-patched.yaml &&
         kubectl apply -f k8s/service.yaml
+
 
 images:
   - '${_IMAGE}'
