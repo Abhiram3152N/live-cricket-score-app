@@ -13,14 +13,15 @@ steps:
   args: ['push', '${_IMAGE}']
 
 # Step 3: Authenticate to GKE and deploy
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: bash
-  args:
+- - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
     - -c
     - |
-      gcloud container clusters get-credentials cricket-cluster --zone=us-central1-a --project=${PROJECT_ID}
-      sed -i "s|IMAGE_PLACEHOLDER|${_IMAGE}|" k8s/deployment.yaml
+      gcloud container clusters get-credentials cricket-cluster --zone=us-central1-a --project=x-landing-466108-p9
+      sed -i "s|IMAGE_PLACEHOLDER|us-central1-docker.pkg.dev/x-landing-466108-p9/cricket-repo/app:c22c5ed|" k8s/deployment.yaml
       kubectl apply -f k8s/
+
 
 images:
   - '${_IMAGE}'
