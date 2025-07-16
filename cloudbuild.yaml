@@ -1,21 +1,24 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/live-cricket-score/my-app:$SHORT_SHA', '.']
+# Build Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', '${_IMAGE}', '.']
 
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/live-cricket-score/my-app:$SHORT_SHA']
+# Push image to Artifact Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', '${_IMAGE}']
 
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args:
-      - 'set'
-      - 'image'
-      - 'deployment/my-app'
-      - 'my-app=us-central1-docker.pkg.dev/$PROJECT_ID/live-cricket-score/my-app:$SHORT_SHA'
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
-
-
+# Deploy to GKE
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: bash
+  args:
+    - -c
+    - |
+      gcloud container clusters get-credentials cricket-cluster --zone us-central1-a --project $PROJECT_ID
+      sed -i "s|IMAGE_PLACEHOLDER|${_IMAGE}|" k8s/deployment.yaml
+      kubectl apply -f k8s/
+substitutions:
+  _IMAGE: us-central1-docker.pkg.dev/$PROJECT_ID/cricket-repo/app:$SHORT_SHA
 images:
-  - 'us-central1-docker.pkg.dev/$PROJECT_ID/live-cricket-score/my-app:$SHORT_SHA'
+  - ${_IMAGE}
+
 
