@@ -14,7 +14,7 @@ steps:
      args:
      - run
      - --filename=app.yaml
-     - --location=us-centrall
+     - --location=us-central1
      - --cluster=gkecluster
 images:
   - '${_IMAGE}'
