@@ -1,23 +1,12 @@
-substitutions:
-  _REGION: us-central1
-  _REPO: cricket-repo
-  _IMAGE: '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/app:${SHORT_SHA}'
-
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '${_IMAGE}', '.']
+    args: ['build', '-t', 'gcr.io/x-landing-466108-p9/live-cricket-score-app', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', '${_IMAGE}']
+    args: ['push', 'gcr.io/x-landing-466108-p9/live-cricket-score-app']
 
-  -  name: "gcr.io/cloud-builders/gke-deploy"
-     args:
-     - run
-     - --filename=app.yaml
-     - --location=us-central1
-     - --cluster=autopilot-cluster-1
 images:
-  - '${_IMAGE}'
+  - 'gcr.io/x-landing-466108-p9/live-cricket-score-app'
 
 options:
   logging: CLOUD_LOGGING_ONLY
