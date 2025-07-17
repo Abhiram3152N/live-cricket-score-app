@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: gcr.io/x-landing-466108-p9/github.com/Abhiram3152N/live-cricket-score-app
+        image: gcr.io/x-landing-466108-p9/live-cricket-score-app
 ---
 
 apiVersion: v1
