@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: live-cricket-score-container
-          image: gcr.io/x-landing-466108-p9/live-cricket-score-app
+          image: gcr.io/x-landing-466108-p9/live-cricket-score-app:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
 ---
