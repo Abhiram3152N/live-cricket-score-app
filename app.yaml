@@ -16,8 +16,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: us-central1-docker.pkg.dev/x-landing-466108-p9/cricket-repo/app:latest
-
+        image: gcr.io/x-landing-466108-p9/github.com/Abhiram3152N/live-cricket-score-app
 ---
 
 apiVersion: v1
